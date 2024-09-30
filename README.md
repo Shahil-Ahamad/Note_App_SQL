@@ -1,0 +1,20 @@
+```sql
+CREATE DATABASE note_db;
+
+use note_db;
+
+CREATE TABLE IF NOT EXISTS notes(
+ Id INT PRIMARY KEY AUTO_INCREMENT,
+ Title VARCHAR(255),
+Name VARCHAR(255),
+Status VARCHAR(255),
+Created_At DATETIME DEFAULT(NOW())
+);
+
+INSERT INTO notes(Title,Name,Status) VALUES 
+('CODE','mAKING TODO','DONE'),
+('CODING','MAKING NOTE','IN_PROGRESS');
+
+SELECT * FROM notes;
+
+```
