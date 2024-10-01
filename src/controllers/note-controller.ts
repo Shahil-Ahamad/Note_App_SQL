@@ -1,14 +1,37 @@
 import { NextFunction, Request, Response } from "express";
 
 import {
-  createnote,
-  deletenote,
-  getAllnotes,
-  getnoteById,
-  updatenote,
+  createNote,
+  createNoteWithPool,
+  deleteNote,
+  deleteNoteWithPool,
+  getAllNotesWithPool,
+  getNoteByIdWithPool,
+  updateNote,
 } from "../database";
 
+export async function createnoteController(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const body = req.body;
 
+    const { title, name, status } = req.body;
+
+    const result = await createNoteWithPool(title, name, status);
+
+    console.log("result", result);
+
+    res.status(201).json({
+      message: "note created successfully",
+    });
+  } catch (error: any) {
+    console.error(error);
+    next(error.message);
+  }
+}
 
 export async function getnoteController(
   req: Request,
@@ -22,11 +45,11 @@ export async function getnoteController(
     return;
   }
 
-  const result = (await getnoteById(parseInt(noteId))) as {
+  const result = (await getNoteByIdWithPool(parseInt(noteId))) as {
     id: number;
-    title:string;
+    title: string;
     name: string;
-    status:string;
+    status: string;
     created_at: Date;
   }[];
 
@@ -45,27 +68,21 @@ export async function getnoteController(
   }
 }
 
-export async function createnoteController(
+export async function getAllnoteController(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
   try {
-    const body = req.body;
+    const result = await getAllNotesWithPool();
 
-
-    const { title, name, status } = req.body; 
-
-    const result = await createnote(title,name,status);
-
-    console.log("result", result);
-
-    res.status(201).json({
-      message: "note created successfully",
+    res.json({
+      data: result,
     });
-  } catch (error: any) {
-    console.error(error);
-    next(error.message);
+  } catch (error) {
+    res.status(500).json({
+      message: "Something went wrong",
+    });
   }
 }
 
@@ -76,12 +93,17 @@ export async function updatenoteController(
 ) {
   try {
     const noteId = req.params.noteId;
-    const { title,name,status } = req.body;
+    const { title, name, status } = req.body;
 
-    const result = (await updatenote(parseInt(noteId), title, name, status)) as {
-      title:string;
+    const result = (await updateNote(
+      parseInt(noteId),
+      title,
+      name,
+      status
+    )) as {
+      title: string;
       name: string;
-      status:string;
+      status: string;
     }[];
 
     res.status(201).json({
@@ -95,10 +117,6 @@ export async function updatenoteController(
   //
 }
 
-
-
-
-
 export async function deletenoteController(
   req: Request,
   res: Response,
@@ -107,7 +125,7 @@ export async function deletenoteController(
   try {
     const noteId = req.params.noteId;
 
-    const result = await deletenote(parseInt(noteId));
+    const result = await deleteNoteWithPool(parseInt(noteId));
 
     res.status(201).json({
       message: "note Deleted Successfully!",
@@ -115,23 +133,5 @@ export async function deletenoteController(
   } catch (error: any) {
     console.error(error);
     next(error.message);
-  }
-}
-
-export async function getAllnoteController(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  try {
-    const result = await getAllnotes();
-
-    res.json({
-      data: result,
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: "Something went wrong",
-    });
   }
 }
