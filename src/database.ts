@@ -52,7 +52,7 @@ export async function createNote(title: string, name: string, status: string) {
   const conn = await getMysqlConnection();
 
   const result = await conn.query(
-    `INSERT INTO notes (Title,Name,Status) VALUES ('${name}','${title}','${status}');`
+    `INSERT INTO notes (Title,Name,Status) VALUES ('${title}','${name}','${status}');`
   );
 
   return result[0];
