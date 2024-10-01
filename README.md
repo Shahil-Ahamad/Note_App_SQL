@@ -11,9 +11,9 @@ Status VARCHAR(255),
 Created_At DATETIME DEFAULT(NOW())
 );
 
-INSERT INTO notes(Title,Name,Status) VALUES 
-('CODE','mAKING TODO','DONE'),
-('CODING','MAKING NOTE','IN_PROGRESS');
+INSERT INTO notes(Title,Name,Status) VALUES
+('CODE','mAKING note','DONE'),
+('CODING','MAKING note','IN_PROGRESS');
 
 SELECT * FROM notes;
 

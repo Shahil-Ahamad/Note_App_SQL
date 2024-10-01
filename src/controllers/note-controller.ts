@@ -5,9 +5,12 @@ import {
   createNoteWithPool,
   deleteNote,
   deleteNoteWithPool,
+  getAllNotes,
   getAllNotesWithPool,
+  getNoteById,
   getNoteByIdWithPool,
   updateNote,
+  updateNoteWithPool,
 } from "../database";
 
 export async function createnoteController(
@@ -95,7 +98,7 @@ export async function updatenoteController(
     const noteId = req.params.noteId;
     const { title, name, status } = req.body;
 
-    const result = (await updateNote(
+    const result = (await updateNoteWithPool(
       parseInt(noteId),
       title,
       name,
