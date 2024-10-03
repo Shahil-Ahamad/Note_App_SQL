@@ -40,31 +40,27 @@ async function createNotesTable() {
     CREATE TABLE IF NOT EXISTS todos(
     Id INT PRIMARY KEY AUTO_INCREMENT,
     Title VARCHAR(255),
-    Name VARCHAR(255),
-    Status VARCHAR(255),
+    description VARCHAR(255),
+     VARCHAR(255),
     Created_At DATETIME DEFAULT(NOW())
 );
     `
   );
 }
 
-export async function createNote(title: string, name: string, status: string) {
+export async function createNote(title: string, description: string) {
   const conn = await getMysqlConnection();
 
   const result = await conn.query(
-    `INSERT INTO notes (Title,Name,Status) VALUES ('${title}','${name}','${status}');`
+    `INSERT INTO notes (Title,Description,) VALUES ('${title}','${description}');`
   );
 
   return result[0];
 }
 
-export async function createNoteWithPool(
-  title: string,
-  name: string,
-  status: string
-) {
+export async function createNoteWithPool(title: string, description: string) {
   const result = await myPool.query(
-    `INSERT INTO notes (Title,Name,Status) VALUES ('${name}','${title}','${status}');`
+    `INSERT INTO notes (Title,Description) VALUES ('${title}','${description}');`
   );
 
   return result[0];
@@ -101,14 +97,13 @@ export async function getAllNotesWithPool() {
 export async function updateNote(
   noteId: number,
   title: string,
-  name: string,
-  status: string
+  description: string
 ) {
   const conn = await getMysqlConnection();
 
   // Run the update query
   const result = await conn.query(
-    `UPDATE notes SET Title='${title}' , Name ='${name}' ,Status='${status}' WHERE Id=${noteId}`
+    `UPDATE notes SET Title='${title}' , Description ='${description}'  WHERE Id=${noteId}`
   );
 
   return result[0];
@@ -117,11 +112,10 @@ export async function updateNote(
 export async function updateNoteWithPool(
   noteId: number,
   title: string,
-  name: string,
-  status: string
+  description: string
 ) {
   const result = await myPool.query(
-    `UPDATE notes SET Title='${title}' , Name ='${name}' ,Status='${status}' WHERE Id=${noteId}`
+    `UPDATE notes SET Title='${title}' , Description ='${description}' WHERE Id=${noteId}`
   );
   return result[0];
 }

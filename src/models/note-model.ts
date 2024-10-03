@@ -1,18 +1,14 @@
-type TnoteStatus = "not_started" | "in_progress" | "done";
-
 export type Tnote = {
   id: number;
-  title:string;
-  name: string;
-  status: TnoteStatus;
+  title: string;
+  description: string;
 };
 
 const notes: Tnote[] = [
   {
     id: 1,
-    title:'Note_App',
-    name: "Reading about mvc pattern",
-    status: "in_progress",
+    title: "Note_App",
+    description: "Reading about mvc pattern",
   },
 ];
 
@@ -26,12 +22,11 @@ export class noteModel {
     return note;
   }
 
-  createnote(title:string,name: string, status: TnoteStatus) {
+  createnote(title: string, description: string) {
     const newnote: Tnote = {
       id: notes.length + 1,
       title,
-      name,
-      status,
+      description,
     };
     notes.push(newnote);
 

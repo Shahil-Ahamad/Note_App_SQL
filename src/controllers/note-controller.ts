@@ -12,6 +12,13 @@ import {
   updateNote,
   updateNoteWithPool,
 } from "../database";
+import {
+  createNoteMongodb,
+  deleteNoteMongodb,
+  getAllNoteMongodb,
+  getNoteByIdMongodb,
+  updateNoteMongodb,
+} from "../mongoose/query";
 
 export async function createnoteController(
   req: Request,
@@ -21,9 +28,16 @@ export async function createnoteController(
   try {
     const body = req.body;
 
-    const { title, name, status } = req.body;
+    const { title, description } = req.body;
 
-    const result = await createNoteWithPool(title, name, status);
+    //MySQL
+    // const result = await createNoteWithPool(title, description);
+
+    //MongoDB
+    const result = (await createNoteMongodb(title, description)) as {
+      title: string;
+      description: string;
+    };
 
     console.log("result", result);
 
@@ -48,17 +62,20 @@ export async function getnoteController(
     return;
   }
 
-  const result = (await getNoteByIdWithPool(parseInt(noteId))) as {
-    id: number;
-    title: string;
-    name: string;
-    status: string;
-    created_at: Date;
-  }[];
+  //MySQL
+  // const result = (await getNoteByIdWithPool(parseInt(noteId))) as {
+  //   id: number;
+  //   title: string;
+  //   description: string;
+  //   created_at: Date;
+  // }[];
+
+  //MongoDB
+  const result = await getNoteByIdMongodb(noteId);
 
   console.log("result", result);
 
-  if (!result.length) {
+  if (!result) {
     res.status(404).json({
       message: "note not found",
       data: null,
@@ -66,7 +83,7 @@ export async function getnoteController(
   } else {
     res.json({
       message: "get note by id",
-      data: result[0],
+      data: result,
     });
   }
 }
@@ -77,7 +94,11 @@ export async function getAllnoteController(
   next: NextFunction
 ) {
   try {
-    const result = await getAllNotesWithPool();
+    //MySQL
+    //const result = await getAllNoteWithPool();
+
+    //MongoDB
+    const result = await getAllNoteMongodb();
 
     res.json({
       data: result,
@@ -96,21 +117,22 @@ export async function updatenoteController(
 ) {
   try {
     const noteId = req.params.noteId;
-    const { title, name, status } = req.body;
+    const { title, description } = req.body;
 
-    const result = (await updateNoteWithPool(
-      parseInt(noteId),
-      title,
-      name,
-      status
-    )) as {
-      title: string;
-      name: string;
-      status: string;
-    }[];
+    //MySQL
+    // const result = (await updateNoteWithPool(
+    //   parseInt(noteId),
+    //   title,
+    //   description
+    // )) as {
+    //   title: string;
+    //   description: string;
+    // }[];
+
+    const result = await updateNoteMongodb(noteId,title,description);
 
     res.status(201).json({
-      data: result[0],
+      data: result,
       message: "note updated successfully!",
     });
   } catch (error: any) {
@@ -128,7 +150,11 @@ export async function deletenoteController(
   try {
     const noteId = req.params.noteId;
 
-    const result = await deleteNoteWithPool(parseInt(noteId));
+    //MySQL
+    // const result = await deleteNoteWithPool(parseInt(noteId));
+
+    //MongoDB
+    const result = await deleteNoteMongodb(noteId);
 
     res.status(201).json({
       message: "note Deleted Successfully!",
