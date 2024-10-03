@@ -6,8 +6,17 @@ import {
   getnoteController,
   updatenoteController,
 } from "./controllers/note-controller";
+import { createDBConnection } from "./mongoose/db";
 
 const PORT = 4000;
+
+createDBConnection()
+  .then((db) => {
+    console.log("DB Connected Successfully");
+  })
+  .catch((err) => {
+    console.error(err);
+  });
 
 const app = express();
 

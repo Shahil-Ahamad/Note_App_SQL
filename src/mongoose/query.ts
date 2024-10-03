@@ -1,10 +1,11 @@
 import { NoteModel } from "./schema";
 
-export async function createNoteMongodb(task: string, description: string) {
+export async function createNoteMongodb(title: String, description: String) {
   const result = await NoteModel.create({
-    task,
+    title,
     description,
   });
+//   console.log("query clear");
   console.log("Created Note", result);
   return result;
 }
@@ -15,19 +16,19 @@ export async function getAllNoteMongodb() {
   return result;
 }
 
-export async function getNoteByIdMongodb(NoteId: string) {
+export async function getNoteByIdMongodb(NoteId: String) {
   const result = await NoteModel.findById(NoteId);
   return result;
 }
 
 export async function updateNoteMongodb(
   noteId: any,
-  task: string,
-  description: string
+  title: String,
+  description: String
 ) {
   const result = await NoteModel.findByIdAndUpdate(noteId, {
     $set: {
-      task,
+      title,
       description,
     },
   });
@@ -35,7 +36,7 @@ export async function updateNoteMongodb(
   return result;
 }
 
-export async function deleteNoteMongodb(noteId: string) {
+export async function deleteNoteMongodb(noteId: String) {
   const result = await NoteModel.findByIdAndDelete(noteId);
   console.log("Deleted Note:", result);
   return result;

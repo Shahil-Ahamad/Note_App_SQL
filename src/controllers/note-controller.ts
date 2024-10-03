@@ -33,12 +33,11 @@ export async function createnoteController(
     //MySQL
     // const result = await createNoteWithPool(title, description);
 
+    // console.log("controller");
     //MongoDB
-    const result = (await createNoteMongodb(title, description)) as {
-      title: string;
-      description: string;
-    };
+    const result = await createNoteMongodb(title, description);
 
+    // console.log("Controller");
     console.log("result", result);
 
     res.status(201).json({
@@ -129,7 +128,7 @@ export async function updatenoteController(
     //   description: string;
     // }[];
 
-    const result = await updateNoteMongodb(noteId,title,description);
+    const result = await updateNoteMongodb(noteId, title, description);
 
     res.status(201).json({
       data: result,

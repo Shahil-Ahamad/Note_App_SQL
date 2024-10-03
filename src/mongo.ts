@@ -9,10 +9,10 @@ async function run() {
     const collection = db.collection("users");
 
     // Insert a document
-    await collection.insertOne({ name: "John", age: 25 });
+    await collection.insertOne({ name: "Note", age: 25 });
 
     // Query the document
-    const user = await collection.findOne({ name: "John" });
+    const user = await collection.findOne({ name: "Note" });
     console.log("Found User:", user);
   } finally {
     await client.close();
